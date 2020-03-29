@@ -1,13 +1,21 @@
 import folium
+import pandas as pd 
 
-map = folium.Map(location=[30.58,-99.09], zoom_start=6)
+# reading and processing data from text file
+data = pd.read_csv("Volcanoes.txt")
+lat = list(data["LAT"])
+long = list(data["LON"])
+markers = list(data["NAME"])
 
 
+# Creating base map and feature group
+map = folium.Map(location=[30.58,-99.09], zoom_start=4)
 fg = folium.FeatureGroup(name="My Map")
-cordinates = [[38.2, -99.1], [37.2, -97.1], [35.2, -95.1]]
 
-for cordinate in cordinates:
-    fg.add_child(folium.Marker(location=cordinate, popup="Hi There", icon=folium.Icon(color='red')))
+
+#iterating through and adding data to map
+for lt,ln,mrk in zip(lat,long,markers):
+    fg.add_child(folium.Marker(location=[lt,ln], popup=mrk, icon=folium.Icon(color='red')))
 
 map.add_child(fg)
 map.save("Map1.html")
